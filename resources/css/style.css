@@ -1,0 +1,21 @@
+.cnt-main {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+h1, h2 {
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: rgb(54, 32, 32);
+    text-align: center;
+}
+.cnt-youtubeplayer {
+    background-color: rgb(27, 25, 25);
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.cnt-youtubeplayer iframe {
+    width: 100%;
+    height: 100%;
+}

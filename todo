@@ -1,0 +1,3 @@
+- Solve When videos are unavailable
+- Create add iframe as a method, that takes resources. Does not add several iframes to the same div, instead overrights the one view
+- Move javascript logic to resources/js/
