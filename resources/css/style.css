@@ -2,6 +2,8 @@
     display: flex;
     flex-direction: column;
     height: 100vh;
+    margin: auto;
+    padding: 10px;
 }
 h1, h2 {
     font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -18,4 +20,21 @@ h1, h2 {
 .cnt-youtubeplayer iframe {
     width: 100%;
     height: 100%;
+}
+#player, 
+#player1,
+#player2,
+#player3,
+#player4,
+#player5,
+#player6,
+#player7,
+#player8,
+#player9,
+#player10,
+#player11
+{
+  margin: auto;
+  padding: 10px;
+  min-height:390px;
 }
