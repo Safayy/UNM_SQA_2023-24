@@ -2,3 +2,4 @@
 - Create add iframe as a method, that takes resources. Does not add several iframes to the same div, instead overrights the one view
 - Move javascript logic to resources/js/
 - Remove need for load/execute buttons (Query present onReady)
+- Allow DL to finish before display
