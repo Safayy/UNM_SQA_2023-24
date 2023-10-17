@@ -8,69 +8,64 @@
     <link rel="stylesheet" href="resources/css/normalize.css">
     <link rel="stylesheet" href="resources/css/style.css">
     <script src="https://apis.google.com/js/api.js"></script>
-
-    <style>
-      #player {
-        margin: auto;
-        padding: 10px;
-      }
-      .cnt-main {
-        margin: auto;
-        padding: 10px;
-      }
-    </style>
   </head>
   <body>
+    <script>
+      function loadClient() {
+        gapi.client.setApiKey("AIzaSyBRgvgjviG26TOvOimVFWfMq6dDvjJlq0o");
+        return gapi.client.load("https://www.googleapis.com/discovery/v1/apis/youtube/v3/rest")
+            .then(function() { console.log("GAPI client loaded for API"); },
+                  function(err) { console.error("Error loading GAPI client for API", err); });
+      }
+
+      function execute() {
+        gapi.client.youtube.search.list({
+          "type":"video",
+          "videoEmbeddable":"true",
+          "videoDuration":"short",
+          "maxResults": 12,
+          "order": "rating",
+          "q": "software quality assurance"
+        })
+            .then(function(response) {
+                console.log("Response", response.body);
+
+                // Add Iframe
+                const iframe = document.createElement("iframe");
+                let src = `https://www.youtube.com/embed/VIDEO_ID?playlist=`;
+            
+                const responseBody = JSON.parse(response.body);
+                const items = responseBody.items;
+
+                let video_list = "";
+                for (const item of items) {
+                  console.log("Video ID:", item.id.videoId);
+                  video_list += item.id.videoId + ",";
+                }
+                video_list = video_list.substring(0, video_list.length - 1);
+                console.log(video_list);
+
+                src = src + video_list;
+                console.log("Loading Videos for: " + src);
+
+                iframe.src = src;
+                iframe.frameBorder = 0;
+                iframe.allowFullscreen = true;
+
+                const cntYoutubePlayer = document.querySelector(".cnt-youtubeplayer");
+                cntYoutubePlayer.appendChild(iframe);
+            },
+            function(err) { console.error("Execute error", err); });
+      }
+      gapi.load("client");
+    </script>
+
     <div class="cnt-main">
       <h1>TOP 12 SQA Posts</h1>
       <h2>on Youtube</h2>
-      <div id="player"></div>
+      <div class="cnt-youtubeplayer"></div>
+      <button onclick="loadClient()">Load</button>
+      <button onclick="execute()">Execute Show TOP 12 SQA Videos on YouTube</button>
     </div>
-
-    <script>
-      // 2. This code loads the IFrame Player API code asynchronously.
-      var tag = document.createElement('script');
-
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      // 3. This function creates an <iframe> (and YouTube player)
-      //    after the API code downloads.
-      var player;
-      function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-          height: '390',
-          width: '640',
-          videoId: 'M7lc1UVf-VE',
-          playerVars: {
-            'playsinline': 1
-          },
-          events: {
-            'onReady': onPlayerReady,
-            'onStateChange': onPlayerStateChange
-          }
-        });
-      }
-
-      // 4. The API will call this function when the video player is ready.
-      function onPlayerReady(event) {
-        event.target.playVideo();
-      }
-
-      // 5. The API calls this function when the player's state changes.
-      //    The function indicates that when playing a video (state=1),
-      //    the player should play for six seconds and then stop.
-      var done = false;
-      function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          setTimeout(stopVideo, 6000);
-          done = true;
-        }
-      }
-      function stopVideo() {
-        player.stopVideo();
-      }
-    </script>
   </body>
 </html>
