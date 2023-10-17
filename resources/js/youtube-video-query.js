@@ -1,11 +1,11 @@
 var url = "https://youtube.googleapis.com/youtube/v3/search?part=snippet";
-const maxResults = "maxResults=12";
-const order = "order=rating";
-const q = "q=SoftwareQualityAssurance";
-const type = "type=video";
-const videoDuration = "videoDuration=short";
-const key = "key=AIzaSyBRgvgjviG26TOvOimVFWfMq6dDvjJlq0o"
-url = url + "&" + maxResults +"&" + order + "&" + q + "&" + type + "&" +videoDuration + "&" + key;
+const maxResults = "12";
+const order = "rating";
+const q = "SoftwareQualityAssurance";
+const type = "video";
+const videoDuration = "short";
+const key = "AIzaSyBRgvgjviG26TOvOimVFWfMq6dDvjJlq0o"
+url = url + "&maxResults=" + maxResults +"&order=" + order + "&q=" + q + "&type=" + type + "&videoDuration=" +videoDuration + "&key=" + key;
   const videoContainer = document.getElementById('video-container');
   fetch(url).then(response => response.json())
         .then(data => {
