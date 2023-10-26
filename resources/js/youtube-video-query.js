@@ -65,7 +65,7 @@
                   video_list = video_list.substring(0, video_list.length - 1);
                   console.log(video_list);
   
-                  src = src + video_list + "&autoplay=1";
+                  src = src + video_list + "&autoplay=1&rel=0";
                   console.log("Loading Videos for: " + src);
   
                   iframe.src = src;
