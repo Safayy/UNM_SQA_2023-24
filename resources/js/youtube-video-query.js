@@ -1,6 +1,3 @@
-// gapi.load("client");
-
-
 /* The file returns the top 12 short youtube videos regarding SQA
  *
  *  Date Created    : 
@@ -8,10 +5,6 @@
  *  License         : 
  *  Last Author     :  
 */
-// Load Google API export
-
-
-
   class YoutubeAPI {
     async loadYoutubeAPI() {
       return new Promise((resolve, reject) => {
@@ -81,6 +74,7 @@
                   iframe.allowAutoplay = true;
                   iframe.mute = true;
                   iframe.frameBorder = false;
+                  iframe.showInfo = true;
   
                   const cntYoutubePlayer = document.querySelector(".cnt-youtubeplayer");
                   cntYoutubePlayer.appendChild(iframe);
