@@ -63,10 +63,10 @@ class YoutubeAPI {
           let src = `https://www.youtube.com/embed/VIDEO_ID?playlist=`;
           const responseBody = JSON.parse(response.body);
           const items = responseBody.items;
-
           let video_list = "";
           for (const item of items) {
               video_list += item.id.videoId + ",";
+              console.log(item.body);
           }
           video_list = video_list.substring(0, video_list.length - 1);
 
@@ -82,17 +82,6 @@ class YoutubeAPI {
       
   }
 
-}
-
-class VideoList { //id keyword
-  
-
-  getList(){
-
-  }
-  filterList(){
-
-  }
 }
 
 const youtubeAPI = new YoutubeAPI("AIzaSyBRgvgjviG26TOvOimVFWfMq6dDvjJlq0o")
