@@ -7,12 +7,12 @@
     <title>TOP SQA Posts</title>
     <link rel="stylesheet" href="resources/css/normalize.css">
     <link rel="stylesheet" href="resources/css/style.css">
-    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script> <!--TODO onload="init()""-->
+    <!-- <script type="module" src="resources/js/load.js" defer></script> -->
     <script src="resources/js/youtube-video-query.js" defer></script>
   </head>
-  <body onload="loadVideo()">    
+  <body>    
     <div class="cnt-main">
-    <!-- title -->
       <h1>TOP 12 SQA Posts</h1>
       <h2>on Youtube</h2>
       <!-- search bar with drop down menu -->
@@ -27,7 +27,7 @@
             <button id="submit-button">Submit</button>
             </div>
         </div>
-    </div>
+      </div>
       <!-- result -->
       <div class="cnt-youtubeplayer" id="video-container"></div>
     </div>
