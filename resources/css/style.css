@@ -22,7 +22,7 @@ h1, h2 {
     height: 100%;
 }
 
-/* Reset default margin and padding /
+/* Reset default margin and padding */
 body, h1, h2, p {
     margin: 0;
     padding: 0;
@@ -52,7 +52,7 @@ h2 {
     font-size: 18px;
     color: #555;
 }
-*/
+
 .show{
     margin-top: 4px;
 }
