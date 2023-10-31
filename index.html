@@ -7,87 +7,50 @@
     <title>TOP SQA Posts</title>
     <link rel="stylesheet" href="resources/css/normalize.css">
     <link rel="stylesheet" href="resources/css/style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
     <script src="https://apis.google.com/js/api.js"></script>
-
+    <script src="resources/js/youtube-video-query.js" defer></script>
+    <script src="resources/js/note-button.js" defer></script>
+    <script src= "https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity= "sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"crossorigin="anonymous"> </script>    
+    <script src= "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"integrity= "sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"crossorigin="anonymous"> </script> 
+    <script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"integrity= "sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"crossorigin="anonymous"> </script> 
+    <script src="https://apis.google.com/js/api.js"></script> <!--TODO onload="init()""-->
+    <!-- <script type="module" src="resources/js/load.js" defer></script> -->
+    <script src="resources/js/youtube-video-query.js" defer></script>
   </head>
-  <body>
+  <body>    
     <div class="cnt-main">
       <h1>TOP 12 SQA Posts</h1>
       <h2>on Youtube</h2>
-      <div id="player"></div>
-      <div id="player1"></div>
-      <div id="player2"></div>
-      <div id="player3"></div>
-      <div id="player4"></div>
-      <div id="player5"></div>
-      <div id="player6"></div>
-      <div id="player7"></div>
-      <div id="player8"></div>
-      <div id="player9"></div>
-      <div id="player10"></div>
-      <div id="player11"></div>
+      <div class="cnt-youtubeplayer" id="video-container"></div>
     </div>
-
-    <script>
-      // 2. This code loads the IFrame Player API code asynchronously.
-      var tag = document.createElement('script');
-
-      tag.src = "https://www.youtube.com/iframe_api";
-      var firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-      // 3. This function creates an <iframe> (and YouTube player)
-      //    after the API code downloads.
-      var playerInfoList = 
-      [
-      {id:'player',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      {id:'player1',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      {id:'player2',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      {id:'player3',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      {id:'player4',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      {id:'player5',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      {id:'player6',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      {id:'player7',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      {id:'player8',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      {id:'player9',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      {id:'player10',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      {id:'player11',height:'390',width:'640',videoId:'M7lc1UVf-VE'},
-      ];
-
-      function onYouTubeIframeAPIReady() {
-        if(typeof playerInfoList === 'undefined')
-           return; 
-
-        for(var i = 0; i < playerInfoList.length;i++) {
-          var curplayer = createPlayer(playerInfoList[i]);
-        }   
-      }
-      function createPlayer(playerInfo) {
-          return new YT.Player(playerInfo.id, {
-             height: playerInfo.height,
-             width: playerInfo.width,
-             videoId: playerInfo.videoId
-          });
-      }
-
-      // 4. The API will call this function when the video player is ready.
-      function onPlayerReady(event) {
-        event.target.playVideo();
-      }
-
-      // 5. The API calls this function when the player's state changes.
-      //    The function indicates that when playing a video (state=1),
-      //    the player should play for six seconds and then stop.
-      var done = false;
-      function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
-          setTimeout(stopVideo, 6000);
-          done = true;
-        }
-      }
-      function stopVideo() {
-        player.stopVideo();
-      }
-    </script>
+    <div class="container"> 
+      <h1>Take your Notes here</h1> 
+      <div class="card"> 
+          <div class="card-body"> 
+              <h5 class="card-title"> 
+                  Add a Note 
+                
+              </h5> 
+              <div class="form-group"> 
+                  <textarea class="form-control"
+                      id="addTxt" rows="3"> 
+                  </textarea> 
+              </div> 
+              <button class="btn btn-primary"
+                  id="addBtn" style= 
+                  "background-color:green"> 
+                  Add Note 
+              </button> 
+          </div> 
+      </div> 
+      <hr> 
+      <h1>Your Notes</h1> 
+      <hr> 
+        
+      <div id="notes" class= 
+          "row container-fluid"> 
+      </div> 
+  </div> 
   </body>
 </html>
