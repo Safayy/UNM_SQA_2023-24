@@ -3,3 +3,4 @@
 - Move javascript logic to resources/js/
 - Remove need for load/execute buttons (Query present onReady)
 - Allow DL to finish before display
+-Fix display (list of video should be shown b4 clicking)
