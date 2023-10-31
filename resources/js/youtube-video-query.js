@@ -96,7 +96,12 @@ const youtubeAPI = new YoutubeAPI("AIzaSyBRgvgjviG26TOvOimVFWfMq6dDvjJlq0o")
      dropdownmenu.style.display = dropdownmenu.style.display === "block" ? "none" : "block";
  });
  //render checkbox from array
- var keywords = ["Software","Quality","Assurance","Music",]
+ let retString = localStorage.getItem("keyword");
+ let keywords = JSON.parse(retString);
+ if(null === keywords)
+ {
+    keywords = ["Software","Development","Education","Music","Animal"];
+ }
  for(keyword of keywords){
    var checkbox = document.createElement('input');
    checkbox.type = 'checkbox';
@@ -131,6 +136,8 @@ addButton.addEventListener("click", function () {
     //check if it is empty, if it is not empty, render the new checkbox
     if(newkeyword != ""){
       keywords.push(newkeyword);
+      let keystring = JSON.stringify(keywords);
+      localStorage.setItem("keyword",keystring);
       var checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.id = newkeyword;
