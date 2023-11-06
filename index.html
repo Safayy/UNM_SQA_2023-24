@@ -22,6 +22,20 @@
     <div class="cnt-main">
       <h1>TOP 12 SQA Posts</h1>
       <h2>on Youtube</h2>
+            <!-- search bar with drop down menu -->
+            <div class="search-container">
+              <input type="text" id="search-bar" placeholder="Search..." style="float: left; width: 90%;">
+              <div class="dropdown">
+                  <button id="dropdown-button">Options</button>
+                  <div id="dropdown-menu"  class="dropdown-content">
+                  <div id="checkbox-list"></div>
+                  <input type="text" placeholder="new keyword" id="newkeyword-field">
+                  <button id="add-button">Add Keyword</button><br>
+                  <button id="submit-button">Submit</button>
+                  </div>
+              </div>
+            </div>
+            <!-- result -->
       <div class="cnt-youtubeplayer" id="video-container"></div>
     </div>
     <div class="container"> 
