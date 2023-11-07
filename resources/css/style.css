@@ -87,7 +87,7 @@ h2 {
 
 #notes {
     overflow-y: scroll;
-    max-height: 300px; /*TODO bad practice*/
+    max-height: 190px; /*TODO bad practice*/
 }
 
 /***** Search *****/
