@@ -68,3 +68,19 @@ h2 {
 .show{
     margin-top: 4px;
 }
+
+.search-container {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown {
+    position: absolute;
+    left: 90%;
+}
+
+.dropdown-content{
+    display: none;
+    z-index: 1;
+    background-color: aliceblue;
+}
