@@ -7,7 +7,7 @@
     <title>TOP SQA Posts</title>
     <link rel="stylesheet" href="resources/css/normalize.css">
     <link rel="stylesheet" href="resources/css/style.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
+    <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">  -->
     <script src="https://apis.google.com/js/api.js"></script>
     <script src="resources/js/youtube-video-query.js" defer></script>
     <script src="resources/js/note-button.js" defer></script>
@@ -23,9 +23,6 @@
       <div class="cnt-white-box cnt-main">
         <h1>TOP 12 Short Videos</h1>
         <h2>Get the best clips</h2>
-        <!-- search bar with drop down menu -->
-        
-        <!-- result -->
         <div class="cnt-youtubeplayer" id="video-container"></div>
       </div>
       <div class="cnt-white-box catalog">
@@ -49,39 +46,38 @@
         </div>
         <div class="cnt-white-box notes">
           <h2>Notes</h2>
+          <div class="container"> 
+            <h1>Take your Notes here</h1> 
+            <div class="card"> 
+                <div class="card-body"> 
+                    <h5 class="card-title"> 
+                        Add a Note
+                    </h5> 
+                    <div class="form-group"> 
+                        <textarea class="form-control"
+                            id="addTxt" rows="3">
+                        </textarea>
+                    </div> 
+                    <button class="btn btn-primary"
+                        id="addBtn" style= 
+                        "background-color:green"> 
+                        Add Note 
+                    </button> 
+                </div> 
+            </div> 
+            <hr> 
+            <h1>Your Notes</h1> 
+            <hr> 
+              
+            <div id="notes" class= 
+                "row container-fluid"> 
+            </div> 
+        </div> 
         </div>
       </div>
     </div>
     <div class="cnt-copyright">
       <p>Created by Group 3, SQA</p>
     </div>
-    <div class="container"> 
-      <h1>Take your Notes here</h1> 
-      <div class="card"> 
-          <div class="card-body"> 
-              <h5 class="card-title"> 
-                  Add a Note 
-                
-              </h5> 
-              <div class="form-group"> 
-                  <textarea class="form-control"
-                      id="addTxt" rows="3"> 
-                  </textarea> 
-              </div> 
-              <button class="btn btn-primary"
-                  id="addBtn" style= 
-                  "background-color:green"> 
-                  Add Note 
-              </button> 
-          </div> 
-      </div> 
-      <hr> 
-      <h1>Your Notes</h1> 
-      <hr> 
-        
-      <div id="notes" class= 
-          "row container-fluid"> 
-      </div> 
-  </div> 
   </body>
 </html>
