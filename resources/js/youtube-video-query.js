@@ -127,6 +127,7 @@ submitButton.addEventListener("click", function(){
     }
     query += "..."
     searchbar.value = query;
+    query = query.replace(/[+\.]{4}/g, ' ').replace(/\+/g, ' ');
     youtubeAPI.searchVideos(query);
 })
 //when add button is click, render the checkbox with new keyword
@@ -150,4 +151,17 @@ addButton.addEventListener("click", function () {
     }
     //clear input field
     document.getElementById("newkeyword-field").value="";
+});
+
+//clear searhbar when user click
+searchbar.addEventListener("click", function () {
+    searchbar.value="";
+})
+
+//get search bar value when user press enter
+searchbar.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        var inputValue = searchbar.value;
+        youtubeAPI.searchVideos(inputValue);
+    }
 });

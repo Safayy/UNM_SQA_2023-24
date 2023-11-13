@@ -98,7 +98,8 @@ h2 {
 
 .dropdown {
     position: absolute;
-    left: 90%;
+    left: 74.5%;   
+    z-index: 2;
 }
 
 .dropdown-content{

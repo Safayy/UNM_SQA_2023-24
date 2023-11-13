@@ -30,15 +30,18 @@
       </div>
       <div class="cnt-details">
         <div class="cnt-white-box sorting">
-          <h2>Sorting</h2>
-          <input type="text" id="search-bar" placeholder="Search..." style="float: left; width: 90%;">
+          <h2>Search</h2>
+          <div style="display: flex; align-items: center;">
+            <button id="dropdown-button">Keywords</button>
+            <input type="text" id="search-bar" placeholder="Search..." style="width: 90%;">
+          </div>
+                  
           <div class="dropdown">
             <div class="search-container">
-              <button id="dropdown-button">Options</button>
               <div id="dropdown-menu"  class="dropdown-content">
               <div id="checkbox-list"></div>
               <input type="text" placeholder="new keyword" id="newkeyword-field">
-              <button id="add-button">Add Keyword</button><br>
+              <button id="add-button">Add Keyword</button><br><br>
               <button id="submit-button">Submit</button>
               </div>
             </div>
