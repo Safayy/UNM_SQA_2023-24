@@ -15,8 +15,8 @@ class VideoListManager {
     for (let video of this.videoList) {
       var videoDiv = document.createElement("div");
       videoDiv.textContent = video;
-      videoDiv.addEventListener("click", function () {
-        displayVideo(video);
+      videoDiv.addEventListener("click", () => {
+        this.displayVideo(video);
       });
       videoListDiv.appendChild(videoDiv);
     }
@@ -24,11 +24,27 @@ class VideoListManager {
   setVideoList(videoList){
     this.videoList = videoList;
     this.displayPlayList();
+    this.displayVideo(this.videoList[0]);
   }
   displayVideo(videoId){
     console.log("Playing video with ID:", videoId);
-    
     //todo highlight playing video
+    let src = `https://www.youtube.com/embed/VIDEO_ID?playlist=`;
+    src = src + videoId + "&autoplay=1&rel=0";
+    console.log("Loading Video for: " + src);
+
+    const iframe = document.createElement("iframe");
+    iframe.src = src;
+    iframe.frameBorder = 0;
+    iframe.allowFullscreen = true;
+    iframe.allowAutoplay = true;
+    iframe.mute = true;
+    iframe.frameBorder = false;
+    iframe.showInfo = true;
+
+    const cntYoutubePlayer = document.querySelector(".cnt-youtubeplayer");
+    cntYoutubePlayer.replaceChildren();
+    cntYoutubePlayer.appendChild(iframe); //TODO replaceChild
   }
 }
 
@@ -64,21 +80,6 @@ class YoutubeAPI {
         initialize();
     }
   
-    displayVideos(src){
-      const iframe = document.createElement("iframe");
-      iframe.src = src;
-      iframe.frameBorder = 0;
-      iframe.allowFullscreen = true;
-      iframe.allowAutoplay = true;
-      iframe.mute = true;
-      iframe.frameBorder = false;
-      iframe.showInfo = true;
-  
-      const cntYoutubePlayer = document.querySelector(".cnt-youtubeplayer");
-      cntYoutubePlayer.replaceChildren();
-      cntYoutubePlayer.appendChild(iframe); //TODO replaceChild
-    }
-  
     searchVideos(query="Software Quality Assurance") {
       gapi.client.youtube.search.list({
           "type": "video",
@@ -89,7 +90,6 @@ class YoutubeAPI {
           "q": query
       })
         .then((response) => {
-            let src = `https://www.youtube.com/embed/VIDEO_ID?playlist=`;
             const responseBody = JSON.parse(response.body);
             const items = responseBody.items;
             let video_id_list = [];
@@ -99,13 +99,8 @@ class YoutubeAPI {
                 video_list += item.id.videoId + ","; //comment out
                 console.log(item.body); //comment out
             }
+
             this.videoListManager.setVideoList(video_id_list);
-            video_list = video_list.substring(0, video_list.length - 1);
-  
-            src = src + video_list + "&autoplay=1&rel=0";
-            console.log("Loading Videos for: " + src);
-  
-            this.displayVideos(src);
         })
         .catch((err) => { console.error("Execute error", err); });
     }
