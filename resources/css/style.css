@@ -107,3 +107,11 @@ h2 {
     z-index: 1;
     background-color: aliceblue;
 }
+#video-list{
+    /* background-color: red; */
+
+}
+#video-list div {
+    height: 50px;
+    
+}

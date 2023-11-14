@@ -15,6 +15,7 @@ class VideoListManager {
     for (let video of this.videoList) {
       var videoDiv = document.createElement("div");
       videoDiv.textContent = video;
+      videoDiv.className = "cnt-white-box";
       videoDiv.addEventListener("click", () => {
         this.displayVideo(video);
       });
@@ -92,12 +93,10 @@ class YoutubeAPI {
         .then((response) => {
             const responseBody = JSON.parse(response.body);
             const items = responseBody.items;
+            console.log(items);
             let video_id_list = [];
-            let video_list = "";
             for (const item of items) {
                 video_id_list.push(item.id.videoId);
-                video_list += item.id.videoId + ","; //comment out
-                console.log(item.body); //comment out
             }
 
             this.videoListManager.setVideoList(video_id_list);
