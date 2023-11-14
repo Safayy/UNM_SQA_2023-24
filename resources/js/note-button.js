@@ -8,8 +8,11 @@ addBtn.addEventListener("click", function(e) {
 
     if (notes == null) notesObj = [];
     else notesObj = JSON.parse(notes);
-
-    notesObj.push(addTxt.value);
+    
+    let vid = videojs("video-container");
+    let timestamp = vid.currentTime;
+    console.log(timestamp);
+    notesObj.push({ note: addTxt.value, timestamp: timestamp });
     localStorage.setItem("notes", JSON.stringify(notesObj));
     addTxt.value = "";
 
