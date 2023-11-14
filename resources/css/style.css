@@ -82,7 +82,7 @@ h2 {
 }
 .notes {
     /* flex-grow: 0; */
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
 }
 
 #notes {
