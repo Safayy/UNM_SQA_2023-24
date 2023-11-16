@@ -5,6 +5,70 @@
  *  License         : 
  *  Last Author     :  
 */
+var player;
+class VideoListManager {
+  constructor(){
+    this.videoList = [];
+  }
+  displayPlayList(){
+    var videoListDiv = document.getElementById("video-list");
+    for (let video of this.videoList) {
+      var videoDiv = document.createElement("div");
+      videoDiv.textContent = video;
+      videoDiv.className = "cnt-white-box";
+      videoDiv.addEventListener("click", () => {
+        this.displayVideo(video);
+      });
+      videoListDiv.appendChild(videoDiv);
+    }
+  }
+  setVideoList(videoList){
+    this.videoList = videoList;
+    this.displayPlayList();
+    this.displayVideo(this.videoList[0]);
+  }
+  displayVideo(videoId){
+    console.log("Playing video with ID:", videoId);
+    //todo highlight playing video
+    let src = `https://www.youtube.com/embed/VIDEO_ID?playlist=`;
+    src = src + videoId + "&autoplay=1&rel=0";
+    console.log("Loading Video for: " + src);
+
+    const iframe = document.createElement("iframe");
+    iframe.src = src;
+    iframe.frameBorder = 0;
+    iframe.allowFullscreen = true;
+    iframe.allowAutoplay = true;
+    iframe.mute = true;
+    iframe.frameBorder = false;
+    iframe.showInfo = true;
+    
+    onYouTubeIframeAPIReady(videoId);
+
+    const cntYoutubePlayer = document.querySelector(".cnt-youtubeplayer");
+    cntYoutubePlayer.replaceChildren();
+    cntYoutubePlayer.appendChild(iframe); //TODO replaceChild
+  }
+}
+
+function onYouTubeIframeAPIReady(videoID) {
+    player = new YT.Player('video-container', {
+        height: '360',
+        width: '640',
+        videoId: videoID, // Replace with your actual video ID
+        events: {
+            'onReady': onPlayerReady,
+            //'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
+function onPlayerReady(event) {
+    // This function gets called when the player is ready
+    console.log('Player is ready');
+}
+
+
 class YoutubeAPI {
     async loadYoutubeAPI() {
       return new Promise((resolve, reject) => {
@@ -16,6 +80,7 @@ class YoutubeAPI {
     }
   
     constructor(API_KEY) {
+        this.videoListManager = new VideoListManager();
         this.API_KEY = API_KEY;
         const initialize = async () => {
           const { gapi } = window;
@@ -36,22 +101,6 @@ class YoutubeAPI {
         initialize();
     }
   
-    displayVideos(src){
-      const iframe = document.createElement("iframe");
-      iframe.src = src;
-      iframe.frameBorder = 0;
-      iframe.allowFullscreen = true;
-      iframe.allowAutoplay = true;
-      iframe.mute = true;
-      iframe.frameBorder = false;
-      iframe.showInfo = true;
-  
-      const cntYoutubePlayer = document.querySelector(".cnt-youtubeplayer");
-      cntYoutubePlayer.replaceChildren();
-      cntYoutubePlayer.appendChild(iframe); //TODO replaceChild
-      
-    }
-  
     searchVideos(query="Software Quality Assurance") {
       gapi.client.youtube.search.list({
           "type": "video",
@@ -62,20 +111,15 @@ class YoutubeAPI {
           "q": query
       })
         .then((response) => {
-            let src = `https://www.youtube.com/embed/VIDEO_ID?playlist=`;
             const responseBody = JSON.parse(response.body);
             const items = responseBody.items;
-            let video_list = "";
+            console.log(items);
+            let video_id_list = [];
             for (const item of items) {
-                video_list += item.id.videoId + ",";
-                console.log(item.body);
+                video_id_list.push(item.id.videoId);
             }
-            video_list = video_list.substring(0, video_list.length - 1);
-  
-            src = src + video_list + "&autoplay=1&rel=0";
-            console.log("Loading Videos for: " + src);
-  
-            this.displayVideos(src);
+
+            this.videoListManager.setVideoList(video_id_list);
         })
         .catch((err) => { console.error("Execute error", err); });
     }
@@ -84,8 +128,8 @@ class YoutubeAPI {
   
   }
   
-const youtubeAPI = new YoutubeAPI("AIzaSyBRgvgjviG26TOvOimVFWfMq6dDvjJlq0o")
-  
+const youtubeAPI = new YoutubeAPI("AIzaSyCMz9hT05lvEd-Fb0mzONMqamzsCI3BbG4")
+
 //keyword function
 // drop down list
  const dropdownButton = document.getElementById("dropdown-button");

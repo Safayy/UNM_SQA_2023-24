@@ -1,5 +1,5 @@
 showNotes();
-    
+
 // If user adds a note, add it to the localStorage
 let addBtn = document.getElementById("addBtn");
 addBtn.addEventListener("click", function(e) {
@@ -9,15 +9,36 @@ addBtn.addEventListener("click", function(e) {
     if (notes == null) notesObj = [];
     else notesObj = JSON.parse(notes);
     
-    let vid = videojs("video-container");
-    let timestamp = vid.currentTime;
-    console.log(timestamp);
-    notesObj.push({ note: addTxt.value, timestamp: timestamp });
+    let currenttime = getCurrentTimeOutsideFunction();
+
+    let noteContent = {
+        text: addTxt.value,
+        time: currenttime // Add current time to the note
+    };
+
+    notesObj.push(noteContent);
     localStorage.setItem("notes", JSON.stringify(notesObj));
     addTxt.value = "";
 
     showNotes();
 });
+
+function getCurrentTimeOutsideFunction() {
+    // Access the current time of the player from an outside function
+    if (player) {
+        var currentTime = player.getCurrentTime();
+        return currentTime;
+    } else {
+        return 0;
+    }
+}
+
+function formatTime(totalSeconds) {
+    var minutes = Math.floor(totalSeconds / 60);
+    var seconds = Math.floor(totalSeconds - minutes * 60);
+    seconds = seconds < 10 ? '0' + seconds : seconds; // Add leading zero if seconds < 10
+    return minutes + ':' + seconds;
+}
 
 // Function to show elements from localStorage
 function showNotes() {
@@ -28,7 +49,7 @@ function showNotes() {
 
     let html = "";
 
-    notesObj.forEach(function(element, index) {
+    notesObj.forEach(function(note, index) {
         html += `<div class="noteCard my-2 mx-2 card" 
             style="width: 18rem;">
                 <div class="card-body">
@@ -36,9 +57,11 @@ function showNotes() {
                         Note ${index + 1}
                     </h5>
                     <p class="card-text"> 
-                        ${element}
+                            ${note.text}
                     </p>
- 
+                    <p class="card-text"> 
+                        Time: ${formatTime(note.time)} 
+                    </p>
                   <button id="${index}" onclick=
                     "deleteNote(this.id)"
                     class="btn btn-primary">
