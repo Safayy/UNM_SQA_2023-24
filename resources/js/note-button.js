@@ -13,7 +13,8 @@ addBtn.addEventListener("click", function(e) {
 
     let noteContent = {
         text: addTxt.value,
-        time: currenttime // Add current time to the note
+        time: currenttime, // Add current time to the note
+        id: player.videoID
     };
 
     notesObj.push(noteContent);
@@ -50,25 +51,27 @@ function showNotes() {
     let html = "";
 
     notesObj.forEach(function(note, index) {
-        html += `<div class="noteCard my-2 mx-2 card" 
-            style="width: 18rem;">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        Note ${index + 1}
-                    </h5>
-                    <p class="card-text"> 
-                            ${note.text}
-                    </p>
-                    <p class="card-text"> 
-                        Time: ${formatTime(note.time)} 
-                    </p>
-                  <button id="${index}" onclick=
-                    "deleteNote(this.id)"
-                    class="btn btn-primary">
-                    Delete Note
-                </button>
-            </div>
-        </div>`;
+        if(note.id == player.videoID){
+            html += `<div class="noteCard my-2 mx-2 card" 
+                style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Note ${index + 1}
+                        </h5>
+                        <p class="card-text"> 
+                                ${note.text}
+                        </p>
+                        <p class="card-text"> 
+                            Time: ${formatTime(note.time)} 
+                        </p>
+                    <button id="${index}" onclick=
+                        "deleteNote(this.id)"
+                        class="btn btn-primary">
+                        Delete Note
+                    </button>
+                </div>
+            </div>`;
+            }
     });
 
     let notesElm = document.getElementById("notes");
@@ -77,6 +80,11 @@ function showNotes() {
     else
         notesElm.innerHTML = `Nothing to show! 
         Use "Add a Note" section above to add notes.`;
+}
+
+function hideNotes() {
+    let notesElm = document.getElementById("notes");
+    notesElm.style.display = "none";
 }
 
 // Function to delete a note
