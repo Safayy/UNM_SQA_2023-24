@@ -80,38 +80,29 @@ h2 {
     flex-direction: column;
     flex: 20;
 }
-.notes {
-    /* flex-grow: 0; */
-    /* overflow-y: scroll; */
-}
-
-#notes {
+.fixed-size {
     overflow-y: scroll;
     max-height: 190px; /*TODO bad practice*/
 }
-
 /***** Search *****/
 .search-container {
     position: relative;
     display: inline-block;
 }
-
 .dropdown {
     position: absolute;
     left: 74.5%;   
     z-index: 2;
 }
 
-.dropdown-content{
+.dropdown-content {
     display: none;
     z-index: 1;
     background-color: aliceblue;
 }
-#video-list{
-    /* background-color: red; */
-
+#video-list {
+    max-height: 650px;/* TODO bad practice */
 }
-#video-list div {
-    height: 50px;
-    
+#video-list > div {
+    height: fit-content;
 }

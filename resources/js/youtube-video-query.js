@@ -10,15 +10,36 @@ class VideoListManager {
   constructor(){
     this.videoList = [];
   }
-  displayPlayList(){
+  displayPlayList() {
     var videoListDiv = document.getElementById("video-list");
+    videoListDiv.innerHTML = '';
+
     for (let video of this.videoList) {
       var videoDiv = document.createElement("div");
-      videoDiv.textContent = video;
       videoDiv.className = "cnt-white-box";
+  
+      var thumbnailDiv = document.createElement("div");
+      thumbnailDiv.className = "thumbnail";
+      var thumbnailImg = document.createElement("img");
+      thumbnailImg.src = video.thumbnail;
+      thumbnailDiv.appendChild(thumbnailImg);
+  
+      var titleDiv = document.createElement("div");
+      titleDiv.className = "title";
+      titleDiv.innerHTML = `<strong>${video.title}</strong>`;
+  
+      var creatorDiv = document.createElement("div");
+      creatorDiv.className = "creator";
+      creatorDiv.textContent = `${video.creator}`;
+  
+      videoDiv.appendChild(thumbnailDiv);
+      videoDiv.appendChild(titleDiv);
+      videoDiv.appendChild(creatorDiv);
+  
       videoDiv.addEventListener("click", () => {
         this.displayVideo(video);
       });
+  
       videoListDiv.appendChild(videoDiv);
     }
   }
@@ -88,18 +109,35 @@ class YoutubeAPI {
           "videoDuration": "short",
           "maxResults": 12,
           "order": "rating",
-          "q": query
+          "q": query,
+          "part": "snippet",
       })
         .then((response) => {
             const responseBody = JSON.parse(response.body);
             const items = responseBody.items;
-            console.log(items);
-            let video_id_list = [];
-            for (const item of items) {
-                video_id_list.push(item.id.videoId);
-            }
 
-            this.videoListManager.setVideoList(video_id_list);
+            let video_list = [];
+            let video = {};
+
+            items.forEach((video) => {
+              let videoId = video.id.videoId;
+              let title = video.snippet.title;
+              let thumbnail = video.snippet.thumbnails.default.url;
+              let creator = video.snippet.channelTitle;
+      
+              video = {
+                "id" : videoId,
+                "title" : title,
+                "thumbnail" : thumbnail,
+                "creator" : creator
+              }
+
+              video_list.push(video)
+            })
+
+            console.log(video_list)
+
+            this.videoListManager.setVideoList(video_list);
         })
         .catch((err) => { console.error("Execute error", err); });
     }
