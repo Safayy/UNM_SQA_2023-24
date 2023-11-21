@@ -48,11 +48,11 @@ class VideoListManager {
     this.displayPlayList();
     this.displayVideo(this.videoList[0]);
   }
-  displayVideo(videoId){
-    console.log("Playing video with ID:", videoId);
-    //todo highlight playing video
+  displayVideo(video){
+    console.log("Playing video with ID:", video);
+    //TODO highlight playing video
     let src = `https://www.youtube.com/embed/VIDEO_ID?playlist=`;
-    src = src + videoId + "&autoplay=1&rel=0";
+    src = src + video.id + "&autoplay=1&rel=0";
     console.log("Loading Video for: " + src);
 
     const iframe = document.createElement("iframe");
