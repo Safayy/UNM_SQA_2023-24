@@ -50,29 +50,30 @@ function showNotes() {
 
     let html = "";
 
+    html = `<div class="noteCard my-2 mx-2 card" 
+        style="width: 18rem;">
+            <div class="card-body">`;
+
     notesObj.forEach(function(note, index) {
         if(note.id == player.videoID){
-            html += `<div class="noteCard my-2 mx-2 card" 
-                style="width: 18rem;">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            Note ${index + 1}
-                        </h5>
-                        <p class="card-text"> 
-                                ${note.text}
-                        </p>
-                        <p class="card-text"> 
-                            Time: ${formatTime(note.time)} 
-                        </p>
-                    <button id="${index}" onclick=
-                        "deleteNote(this.id)"
-                        class="btn btn-primary">
-                        Delete Note
-                    </button>
-                </div>
-            </div>`;
+            html += `
+            <p class="card-text"> <b>
+                Time: ${formatTime(note.time)} 
+                </b>
+            </p>
+            <p class="card-text"> 
+                       ${note.text}
+                        </p>`;
             }
     });
+
+    html += `<button id="dlt" onclick=
+                "deleteNote(this.id)"
+                    class="btn btn-primary">
+                Delete Note
+            </button>
+            </div>
+            </div>`;
 
     let notesElm = document.getElementById("notes");
 
