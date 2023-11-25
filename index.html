@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>TOP SQA Posts</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
     <link rel="stylesheet" href="resources/css/normalize.css">
     <link rel="stylesheet" href="resources/css/style.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> 
     <script src="https://apis.google.com/js/api.js"></script>
-    <script src="resources/js/youtube-video-query.js" defer></script>
     <script src="resources/js/note-button.js" defer></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="playerScript.js" defer></script>
     <script src= "https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity= "sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"crossorigin="anonymous"> </script>    
     <script src= "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"integrity= "sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"crossorigin="anonymous"> </script> 
     <script src= "https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"integrity= "sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"crossorigin="anonymous"> </script> 
@@ -19,52 +20,75 @@
     <script src="resources/js/youtube-video-query.js" defer></script>
   </head>
   <body>    
-    <div class="cnt-main">
-      <h1>TOP 12 SQA Posts</h1>
-      <h2>on Youtube</h2>
-            <!-- search bar with drop down menu -->
+    <div class="cnt-body">
+      <div class="cnt-white-box cnt-main">
+        <h1>TOP 12 Short Videos</h1>
+        <h2>Get the best clips</h2>
+        <div class="cnt-youtubeplayer" id="video-container"></div>
+      </div>
+      <div class="cnt-white-box catalog">
+        <h2>Videos</h2>
+          <div id="video-list" class="fixed-size">Loading...</div>
+      </div>
+      <div class="cnt-details">
+        <div class="cnt-white-box sorting">
+          <h2>Search</h2>
+          <div style="display: flex; align-items: center;">
+            <button id="dropdown-button">Keywords</button>
+            <input type="text" id="search-bar" placeholder="Search..." style="width: 90%;">
+          </div>
+                  
+          <div class="dropdown">
             <div class="search-container">
-              <input type="text" id="search-bar" placeholder="Search..." style="float: left; width: 90%;">
-              <div class="dropdown">
-                  <button id="dropdown-button">Options</button>
-                  <div id="dropdown-menu"  class="dropdown-content">
-                  <div id="checkbox-list"></div>
-                  <input type="text" placeholder="new keyword" id="newkeyword-field">
-                  <button id="add-button">Add Keyword</button><br>
-                  <button id="submit-button">Submit</button>
-                  </div>
+              <div id="dropdown-menu"  class="dropdown-content">
+              <div id="checkbox-list"></div>
+              <input type="text" placeholder="new keyword" id="newkeyword-field">
+              <button id="add-button">Add Keyword</button><br><br>
+              <button id="submit-button">Submit</button>
               </div>
             </div>
-            <!-- result -->
-      <div class="cnt-youtubeplayer" id="video-container"></div>
+          </div>
+        </div>
+        <div class="cnt-white-box notes">
+          <h2>Notes</h2>
+          <div class="container"> 
+            <div class="card"> 
+                <div class="card-body"> 
+                    <h5 class="card-title"> 
+                        Add a Note
+                    </h5> 
+                    <div class="form-group"> 
+                        <textarea class="form-control"
+                            id="addTxt" rows="3">
+                        </textarea>
+                    </div> 
+                    <button class="btn btn-primary"
+                        id="addBtn" style= 
+                        "background-color:green"> 
+                        Add Note 
+                    </button> 
+                </div> 
+            </div> 
+            <hr> 
+            <h1>Your Notes</h1> 
+            <hr> 
+  
+            <div id="notes" class= 
+                "row container-fluid fixed-size"> 
+            </div>
+           
+            <button class = "btn btn-primary" id="exportBtn" 
+            onclick="exportToFile()"
+            style= "background-color:green">
+              Export Text File
+            </button> 
+        </div> 
+        </div>
+      </div>
     </div>
-    <div class="container"> 
-      <h1>Take your Notes here</h1> 
-      <div class="card"> 
-          <div class="card-body"> 
-              <h5 class="card-title"> 
-                  Add a Note 
-                
-              </h5> 
-              <div class="form-group"> 
-                  <textarea class="form-control"
-                      id="addTxt" rows="3"> 
-                  </textarea> 
-              </div> 
-              <button class="btn btn-primary"
-                  id="addBtn" style= 
-                  "background-color:green"> 
-                  Add Note 
-              </button> 
-          </div> 
-      </div> 
-      <hr> 
-      <h1>Your Notes</h1> 
-      <hr> 
-        
-      <div id="notes" class= 
-          "row container-fluid"> 
-      </div> 
-  </div> 
+    <div class="cnt-copyright">
+      <p>Created by Group 3, SQA. Favicon by FreePik</p>
+    </div>
   </body>
 </html>
+
