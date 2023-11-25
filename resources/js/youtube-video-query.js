@@ -5,6 +5,7 @@
  *  License         : 
  *  Last Author     :  
 */
+var player;
 
 class VideoListManager {
   constructor(){
@@ -64,10 +65,29 @@ class VideoListManager {
     iframe.frameBorder = false;
     iframe.showInfo = true;
 
+    onYouTubeIframeAPIReady(video.id);
+
     const cntYoutubePlayer = document.querySelector(".cnt-youtubeplayer");
     cntYoutubePlayer.replaceChildren();
     cntYoutubePlayer.appendChild(iframe); //TODO replaceChild
   }
+}
+
+function onYouTubeIframeAPIReady(videoID) {
+    player = new YT.Player('video-container', {
+        height: '360',
+        width: '640',
+        videoId: videoID, // Replace with your actual video ID
+        events: {
+            'onReady': onPlayerReady,
+            //'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
+function onPlayerReady(event) {
+  // This function gets called when the player is ready
+  console.log('Player is ready');
 }
 
 class YoutubeAPI {
@@ -146,7 +166,7 @@ class YoutubeAPI {
   
   }
   
-const youtubeAPI = new YoutubeAPI("AIzaSyCMz9hT05lvEd-Fb0mzONMqamzsCI3BbG4")
+const youtubeAPI = new YoutubeAPI(window.API_KEY)
 
 //keyword function
 // drop down list
@@ -227,5 +247,3 @@ searchbar.addEventListener("keydown", function (event) {
         youtubeAPI.searchVideos(inputValue);
     }
 });
-
-

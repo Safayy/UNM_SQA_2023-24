@@ -1,7 +1,17 @@
-import YoutubeAPI from "./youtube-video-query";
-
-require("dotenv").config();
-
-//console.log(process.env.API_KEY)
-//const youtubeAPI = new YoutubeAPI("AIzaSyBRgvgjviG26TOvOimVFWfMq6dDvjJlq0o")
-const youtubeAPI = new YoutubeAPI(process.env.API_KEY);
+(function () {
+    // Fetches the .env file content
+    fetch('.env')
+      .then(response => response.text())
+      .then(content => {
+        const lines = content.split('\n');
+  
+        lines.forEach(line => {
+          const [key, value] = line.split('=');
+  
+          if (key && value) {
+            window[key.trim()] = value.trim();
+          }
+        });
+      })
+      .catch(error => console.error('Error loading .env:', error));
+  })();
