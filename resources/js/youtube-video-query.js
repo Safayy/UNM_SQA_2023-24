@@ -52,7 +52,7 @@ class VideoListManager {
   displayVideo(video){
     console.log("Playing video with ID:", video);
     //TODO highlight playing video
-    let src = `https://www.youtube.com/embed/VIDEO_ID?playlist=`;
+    let src = `https://www.youtube.com/embed/VIDEO_ID?playlist=`; //todo not playlist
     src = src + video.id + "&autoplay=1&rel=0";
     console.log("Loading Video for: " + src);
 
@@ -64,30 +64,29 @@ class VideoListManager {
     iframe.mute = true;
     iframe.frameBorder = false;
     iframe.showInfo = true;
-
-    onYouTubeIframeAPIReady(video.id);
-
+    if (player) {
+      player.destroy();
+    }
     const cntYoutubePlayer = document.querySelector(".cnt-youtubeplayer");
     cntYoutubePlayer.replaceChildren();
     cntYoutubePlayer.appendChild(iframe); //TODO replaceChild
+    onYouTubeIframeAPIReady(video.id);
   }
 }
 
-function onYouTubeIframeAPIReady(videoID) {
-    player = new YT.Player('video-container', {
-        height: '360',
-        width: '640',
-        videoId: videoID, // Replace with your actual video ID
-        events: {
-            'onReady': onPlayerReady,
-            //'onStateChange': onPlayerStateChange
-        }
-    });
+function onPlayerReady(event) {
+  event.target.playVideo();
 }
 
-function onPlayerReady(event) {
-  // This function gets called when the player is ready
-  console.log('Player is ready');
+function onYouTubeIframeAPIReady(videoID) {
+  player = new YT.Player('video-container', {
+      height: '360',
+      width: '640',
+      videoId: videoID,
+      events: {
+          'onReady': onPlayerReady,
+      }
+  });
 }
 
 class YoutubeAPI {
@@ -165,7 +164,7 @@ class YoutubeAPI {
     
   
   }
-  
+console.log(window.API_KEY)
 const youtubeAPI = new YoutubeAPI(window.API_KEY)
 
 //keyword function
