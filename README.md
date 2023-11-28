@@ -1,6 +1,6 @@
 # UNM_SQA_2023-24 Group 3
 ## Running the Program
-Enter the root directory. Run the following commands then the website will be hosted locally at `http://localhost:8000/`
+Enter the root directory. Run the following commands then the website will be hosted locally at `http://localhost:3000/`
 ```bash
 # Run NPM and resolve dependencies
 npm install
