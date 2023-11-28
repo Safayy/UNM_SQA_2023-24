@@ -1,8 +1,9 @@
-import player from "./youtube-api.js";
-
 class VideoListManager {
     constructor(){
       this.videoList = [];
+      this.videoCurrent;
+      this.isUnique = true;
+      this.player;
     }
     displayPlayList() {
       var videoListDiv = document.getElementById("video-list");
@@ -38,48 +39,29 @@ class VideoListManager {
       }
     }
     setVideoList(videoList){
+      if (this.isUnique){
+        this.onYouTubeIframeAPIReady(videoList[0].id)
+        this.isUnique = false;
+      }
       this.videoList = videoList;
       this.displayPlayList();
       this.displayVideo(this.videoList[0]);
     }
     displayVideo(video){
-      console.log("Playing video with ID:", video);
-      //TODO highlight playing video
-      let src = `https://www.youtube.com/embed/VIDEO_ID?playlist=`; //todo not playlist
-      src = src + video.id + "&autoplay=1&rel=0";
-      console.log("Loading Video for: " + src);
-  
-      const iframe = document.createElement("iframe");
-      iframe.src = src;
-      iframe.frameBorder = 0;
-      iframe.allowFullscreen = true;
-      iframe.allowAutoplay = true;
-      iframe.mute = true;
-      iframe.frameBorder = false;
-      iframe.showInfo = true;
-      if (player) {
-        player.destroy();
-      }
-      const cntYoutubePlayer = document.querySelector(".cnt-youtubeplayer");
-      cntYoutubePlayer.replaceChildren();
-      cntYoutubePlayer.appendChild(iframe); //TODO replaceChild
-      //onYouTubeIframeAPIReady(video.id);
+      this.videoCurrent = video;      
+      this.player.loadVideoById(video.id, 0, "large")
+    }
+
+    onYouTubeIframeAPIReady(id) {
+      console.log('IframeAPI = Ready');
+      this.player = new YT.Player('video-container', {
+          videoId: id,
+          events: {
+              'onReady': onPlayerReady
+          }
+      });
     }
 }
 
-function onPlayerReady(event) {
-  event.target.playVideo();
-}
-
-function onYouTubeIframeAPIReady(videoID) {
-  player = new YT.Player('video-container', {
-      height: '360',
-      width: '640',
-      videoId: videoID,
-      events: {
-          'onReady': onPlayerReady,
-      }
-  });
-}
-
-export default VideoListManager;
+let videoListManager = new VideoListManager();
+export default videoListManager;

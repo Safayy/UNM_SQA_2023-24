@@ -1,12 +1,23 @@
 import notesObj from "./note-button.js";
+import videoListManager from "./video-manager.js";
+
+function formatTime(totalSeconds) {
+    var minutes = Math.floor(totalSeconds / 60);
+    var seconds = Math.floor(totalSeconds - minutes * 60);
+    seconds = seconds < 10 ? '0' + seconds : seconds; // Add leading zero if seconds < 10
+    return minutes + ':' + seconds;
+}
+
+export default formatTime;
 
 function exportToFile() {
     //Gets the notes from localStorage
     let notes = localStorage.getItem("notes");
-    notesObj = notes ? JSON.parse(notes) : [];
+    let notesText = notesObj;
+    notesText = notes ? JSON.parse(notes) : [];
     let exportContent = `Video Link: ${getCurrentlyPlayingVideoLink()}\n\nNotes:\n`;
 
-    notesObj.forEach((note) => {
+    notesText.forEach((note) => {
         exportContent += `[${formatTime(note.time)}] - ${note.text}\n`;
     });
 
@@ -24,10 +35,16 @@ function exportToFile() {
 
 //Gets video ID and appends to link
 function getCurrentlyPlayingVideoLink() {
-    if (player) {
-        let videoId = player.getVideoData().video_id;
+    if (videoListManager.player) {
+        let videoId = videoListManager.videoCurrent.id;
         return `https://www.youtube.com/watch?v=${videoId}`;
     } else {
         return "No video currently playing.";
     }
 }
+
+let elm = document.getElementById('exportBtn');
+elm.addEventListener('click', () => {
+    exportToFile();
+})
+

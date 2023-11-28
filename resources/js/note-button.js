@@ -1,4 +1,6 @@
-import player from './youtube-api.js';
+import videoListManager from './video-manager.js';
+import formatTime from './share.js';
+
 showNotes();
 
 var notesObj;
@@ -17,8 +19,8 @@ addBtn.addEventListener("click", function(e) {
 
     let noteContent = {
         text: addTxt.value,
-        time: currenttime, // Add current time to the note
-        id: player.videoID
+        time: currenttime,
+        id: videoListManager.videoCurrent.id
     };
 
     notesObj.push(noteContent);
@@ -29,20 +31,14 @@ addBtn.addEventListener("click", function(e) {
 });
 
 function getCurrentTimeOutsideFunction() {
-    // Access the current time of the player from an outside function
-    if (player) {
-        var currentTime = player.getCurrentTime();
+    console.log("Getting current time");
+    if (videoListManager.player) {
+        var currentTime = videoListManager.player.getCurrentTime();
+        console.log(currentTime)
         return currentTime;
     } else {
         return 0;
     }
-}
-
-function formatTime(totalSeconds) {
-    var minutes = Math.floor(totalSeconds / 60);
-    var seconds = Math.floor(totalSeconds - minutes * 60);
-    seconds = seconds < 10 ? '0' + seconds : seconds; // Add leading zero if seconds < 10
-    return minutes + ':' + seconds;
 }
 
 // Function to show elements from localStorage
@@ -59,10 +55,13 @@ function showNotes() {
             <div class="card-body">`;
 
     notesObj.forEach(function(note, index) {
-        if(note.id == player.videoID){
+        if (videoListManager.videoCurrent === undefined){
+            console.log("Video loading")
+        }
+        else if (note.id == videoListManager.videoCurrent.id){
             html += `
             <p class="card-text"> <b>
-                Time: ${formatTime(note.time)} 
+                Time: ${formatTime(note.time)}
                 </b>
             </p>
             <p class="card-text"> 
@@ -71,25 +70,24 @@ function showNotes() {
             }
     });
 
-    html += `<button id="dlt" onclick=
-                "deleteNote(this.id)"
-                    class="btn btn-primary">
-                Delete Note
-            </button>
-            </div>
-            </div>`;
+    let deleteButton = document.createElement("button");
+    deleteButton.id = "dlt";
+    deleteButton.classList.add("btn", "btn-primary");
+    deleteButton.textContent = "Delete Note";
+
+    deleteButton.addEventListener("click", function () {
+        deleteNote(deleteButton.id);
+    });
 
     let notesElm = document.getElementById("notes");
 
-    if (notesObj.length != 0) notesElm.innerHTML = html;
+    if (notesObj.length != 0){
+        notesElm.innerHTML = html;
+        notesElm.appendChild(deleteButton);
+    }
     else
         notesElm.innerHTML = `Nothing to show! 
         Use "Add a Note" section above to add notes.`;
-}
-
-function hideNotes() {
-    let notesElm = document.getElementById("notes");
-    notesElm.style.display = "none";
 }
 
 // Function to delete a note
