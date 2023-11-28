@@ -1,11 +1,17 @@
 # UNM_SQA_2023-24 Group 3
 ## Running the Program
-Run the following commands then the website will be hosted locally at `http://localhost:8000/`
+Enter the root directory. Run the following commands then the website will be hosted locally at `http://localhost:8000/`
 ```bash
 # Run NPM and resolve dependencies
 npm install
 # Start server
-python ./app.py
+node ./index.js
+```
+
+## Run tests
+In the root directory run the command.
+```bash
+npm test
 ```
 
 ## Requirements and Features
