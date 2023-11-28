@@ -1,4 +1,8 @@
+import player from './youtube-api.js';
 showNotes();
+
+var notesObj;
+export default notesObj;
 
 // If user adds a note, add it to the localStorage
 let addBtn = document.getElementById("addBtn");

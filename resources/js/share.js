@@ -1,7 +1,9 @@
+import notesObj from "./note-button.js";
+
 function exportToFile() {
     //Gets the notes from localStorage
     let notes = localStorage.getItem("notes");
-    let notesObj = notes ? JSON.parse(notes) : [];
+    notesObj = notes ? JSON.parse(notes) : [];
     let exportContent = `Video Link: ${getCurrentlyPlayingVideoLink()}\n\nNotes:\n`;
 
     notesObj.forEach((note) => {
