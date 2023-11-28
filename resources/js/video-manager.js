@@ -1,3 +1,6 @@
+import exports from './note-button.js'
+const { notesObj, showNotes } = exports;
+
 class VideoListManager {
     constructor(){
       this.videoList = [];
@@ -40,13 +43,19 @@ class VideoListManager {
     }
     setVideoList(videoList){
       if (this.isUnique){
-        this.onYouTubeIframeAPIReady(videoList[0].id)
-        this.isUnique = false;
+        this.onReady(videoList[0].id)
       }
       this.videoList = videoList;
       this.displayPlayList();
       this.displayVideo(this.videoList[0]);
     }
+
+    onReady = async (id) => {
+      await this.onYouTubeIframeAPIReady(id);
+      showNotes();
+      this.isUnique = false;
+    }
+
     displayVideo(video){
       this.videoCurrent = video;      
       this.player.loadVideoById(video.id, 0, "large")

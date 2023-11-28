@@ -1,10 +1,9 @@
 import videoListManager from './video-manager.js';
 import formatTime from './share.js';
 
-showNotes();
+// showNotes();
 
 var notesObj;
-export default notesObj;
 
 // If user adds a note, add it to the localStorage
 let addBtn = document.getElementById("addBtn");
@@ -31,10 +30,8 @@ addBtn.addEventListener("click", function(e) {
 });
 
 function getCurrentTimeOutsideFunction() {
-    console.log("Getting current time");
     if (videoListManager.player) {
         var currentTime = videoListManager.player.getCurrentTime();
-        console.log(currentTime)
         return currentTime;
     } else {
         return 0;
@@ -43,6 +40,7 @@ function getCurrentTimeOutsideFunction() {
 
 // Function to show elements from localStorage
 function showNotes() {
+    console.log('Showing notes');
     let notes = localStorage.getItem("notes");
 
     if (notes == null) notesObj = [];
@@ -54,21 +52,22 @@ function showNotes() {
         style="width: 18rem;">
             <div class="card-body">`;
 
-    notesObj.forEach(function(note, index) {
-        if (videoListManager.videoCurrent === undefined){
-            console.log("Video loading")
-        }
-        else if (note.id == videoListManager.videoCurrent.id){
-            html += `
-            <p class="card-text"> <b>
-                Time: ${formatTime(note.time)}
-                </b>
-            </p>
-            <p class="card-text"> 
-                       ${note.text}
-                        </p>`;
-            }
-    });
+    if (videoListManager.videoCurrent === undefined){
+        console.log('Video is loading');
+    } else {
+        notesObj.forEach(function(note, index) {
+            if (note.id == videoListManager.videoCurrent.id){
+                html += `
+                <p class="card-text"> <b>
+                    Time: ${formatTime(note.time)}
+                    </b>
+                </p>
+                <p class="card-text"> 
+                           ${note.text}
+                            </p>`;
+                }
+        });
+    }
 
     let deleteButton = document.createElement("button");
     deleteButton.id = "dlt";
@@ -104,3 +103,4 @@ function deleteNote(index) {
 
     showNotes();
 }
+export default {notesObj, showNotes};
