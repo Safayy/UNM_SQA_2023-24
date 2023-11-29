@@ -14,7 +14,7 @@ class VideoListManager {
   
       for (let video of this.videoList) {
         var videoDiv = document.createElement("div");
-        videoDiv.className = "cnt-white-box";
+        videoDiv.className = "cnt-white-box playlist-video";
     
         var thumbnailDiv = document.createElement("div");
         thumbnailDiv.className = "thumbnail";
@@ -42,22 +42,22 @@ class VideoListManager {
       }
     }
     setVideoList(videoList){
-      if (this.isUnique){
-        this.onReady(videoList[0].id)
-      }
       this.videoList = videoList;
       this.displayPlayList();
       this.displayVideo(this.videoList[0]);
     }
 
     onReady = async (id) => {
-      await this.onYouTubeIframeAPIReady(id);
+      if(this.isUnique){
+        await this.onYouTubeIframeAPIReady(id);
+        this.isUnique = false
+      }
       showNotes();
-      this.isUnique = false;
     }
 
     displayVideo(video){
-      this.videoCurrent = video;      
+      this.videoCurrent = video;  
+      this.onReady(video.id);    
       this.player.loadVideoById(video.id, 0, "large")
     }
 
