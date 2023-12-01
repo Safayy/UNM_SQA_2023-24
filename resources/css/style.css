@@ -106,3 +106,7 @@ h2 {
 #video-list > div {
     height: fit-content;
 }
+.highlight {
+    background-color: lightyellow; /* You can customize the highlighting style */
+    font-weight: bold;       /* Add any additional styling you want for highlighted notes */
+}
