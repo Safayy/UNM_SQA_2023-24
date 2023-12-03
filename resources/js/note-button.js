@@ -4,15 +4,15 @@ import formatTime from './share.js';
 // showNotes();
 
 var notesObj;
+let notes = localStorage.getItem("notes");
+    if (notes == null) notesObj = [];
+    else notesObj = JSON.parse(notes);
+var currentnoteObj;
 
 // If user adds a note, add it to the localStorage
 let addBtn = document.getElementById("addBtn");
 addBtn.addEventListener("click", function(e) {
     let addTxt = document.getElementById("addTxt");
-    let notes = localStorage.getItem("notes");
-
-    if (notes == null) notesObj = [];
-    else notesObj = JSON.parse(notes);
     
     let currenttime = getCurrentTimeOutsideFunction();
 
@@ -23,7 +23,6 @@ addBtn.addEventListener("click", function(e) {
     };
 
     notesObj.push(noteContent);
-    localStorage.setItem("notes", JSON.stringify(notesObj));
     addTxt.value = "";
 
     showNotes();
@@ -44,80 +43,58 @@ function clearNotes() {
     notesElm.innerHTML = ""; // Clears the inner HTML, removing all existing notes
 }
 
-// Function to show elements from localStorage
 function showNotes() {
     stopHighlighting();
+    currentnoteObj = [];
     console.log('Showing notes');
-    let notes = localStorage.getItem("notes");
-
-    if (notes == null) notesObj = [];
-    else notesObj = JSON.parse(notes);
-
-    clearNotes();
-
+    
     let html = "";
 
-    html = `<div class="noteCard my-2 mx-2 card" style="width: 18rem;">
-                <div class="card-body">`;
+    html = `<div class="noteCard my-2 mx-2 card" 
+        style="width: 18rem;">
+            <div class="card-body">`;
 
-    if (videoListManager.videoCurrent === undefined) {
+    if (videoListManager.videoCurrent === undefined){
         console.log('Video is loading');
     } else {
-        notesObj.forEach(function (note, index) {
-            if (note.id == videoListManager.videoCurrent.id) {
-                html += `
-                    <div class="note">
-                        <p class="card-text"> <b>
-                            Time: ${formatTime(note.time)}
-                            </b>
-                        </p>
-                        <p class="card-text"> 
-                            ${note.text}
-                        </p>
-                    </div>
-                    <button class=edt-btn id=edt>Edit</button>`
-                    ;
+        notesObj.forEach(function(note,index) {
+            if (note.id == videoListManager.videoCurrent.id){
+                currentnoteObj.push(note);
             }
         });
         startHighlighting();
     }
+
+    currentnoteObj.forEach(function(note,index){
+        html += `
+        <div class="note">
+                <p class="card-text"> 
+                <b>Time: ${formatTime(note.time)}</b>
+                </p>
+                <p class="card-text"> 
+                ${note.text}
+                </p>
+        </div>`;      
+    })
+
     let deleteButton = document.createElement("button");
     deleteButton.id = "dlt";
     deleteButton.classList.add("btn", "btn-primary");
     deleteButton.textContent = "Delete Note";
 
-    deleteButton.addEventListener("click", function () {
+    /*deleteButton.addEventListener("click", function () {
         deleteNote(deleteButton.id);
-    });
+    });*/
 
     let notesElm = document.getElementById("notes");
 
-    if (notesObj.length != 0) {
+    if (currentnoteObj.length != 0){
         notesElm.innerHTML = html;
-        
-        // Adding event listener for 'Edit' button after it's created
-        if(notesObj.length == 1){
-            let editButtons = document.getElementById('edt');
-            editButtons.addEventListener('click', function() {
-                console.log('Edit button clicked');
-                console.log(editButtons.className);
-            });
-        } else {
-        let editButtons = document.querySelectorAll('#edt');
-        editButtons.forEach(function(editBtn) {
-            editBtn.addEventListener('click', function() {
-                console.log('Edit button clicked');
-                console.log(editButtons.classList);
-            });
-        });
-    }
-
         notesElm.appendChild(deleteButton);
     }
     else
         notesElm.innerHTML = `Nothing to show! 
         Use "Add a Note" section above to add notes.`;
-
 }
 
 // Function to edit a note
@@ -160,23 +137,25 @@ let highlightInterval;
 
 // Function to start continuously checking and highlighting notes
 function startHighlighting() {
+    console.log("Start highlighting");
     highlightInterval = setInterval(function () {
         let currentTime = getCurrentTimeOutsideFunction();
+        console.log("Start counting");
 
-        notesObj.forEach(function (note, index) {
-            if (note.id == videoListManager.videoCurrent.id) {
+        currentnoteObj.forEach(function (note, index) {
+                console.log("checking note");
                 // Check if the current time is within the highlighting duration (1.5 seconds before and after)
                 let isHighlighted = currentTime >= note.time - 1.5 && currentTime <= note.time + 1.5;
 
                 // Add or remove the highlight class based on the condition
                 toggleHighlight(index, isHighlighted);
-            }
         });
     }, 1000); // Check every second
 }
 
 // Function to stop continuously checking and highlighting notes
 function stopHighlighting() {
+    console.log("Stop highlighting");
     clearInterval(highlightInterval);
 }
 
@@ -185,58 +164,9 @@ function toggleHighlight(index, isHighlighted) {
     let noteElements = document.getElementsByClassName("note");
 
     if (noteElements.length > index) {
+        console.log("checking note 2");
         if (isHighlighted) {
-            noteElements[index].classList.add("highlight");
-            setTimeout(() => {
-                removeHighlight(index);
-            }, 3000);
-        } else {
-            noteElements[index].classList.remove("highlight");
-        }
-    }
-}
-
-// Function to remove highlighting class
-function removeHighlight(index) {
-    let notesElm = document.getElementById("notes");
-    let noteElements = notesElm.getElementsByClassName("note");
-
-    if (noteElements.length > index) {
-        noteElements[index].classList.remove("highlight");
-    }
-}
-
-
-let highlightInterval;
-
-// Function to start continuously checking and highlighting notes
-function startHighlighting() {
-    highlightInterval = setInterval(function () {
-        let currentTime = getCurrentTimeOutsideFunction();
-
-        notesObj.forEach(function (note, index) {
-            if (note.id == videoListManager.videoCurrent.id) {
-                // Check if the current time is within the highlighting duration (1.5 seconds before and after)
-                let isHighlighted = currentTime >= note.time - 1.5 && currentTime <= note.time + 1.5;
-
-                // Add or remove the highlight class based on the condition
-                toggleHighlight(index, isHighlighted);
-            }
-        });
-    }, 1000); // Check every second
-}
-
-// Function to stop continuously checking and highlighting notes
-function stopHighlighting() {
-    clearInterval(highlightInterval);
-}
-
-// Function to toggle the highlight class for a note
-function toggleHighlight(index, isHighlighted) {
-    let noteElements = document.getElementsByClassName("note");
-
-    if (noteElements.length > index) {
-        if (isHighlighted) {
+            console.log("highlight");
             noteElements[index].classList.add("highlight");
             setTimeout(() => {
                 removeHighlight(index);
@@ -259,12 +189,8 @@ function removeHighlight(index) {
 
 // Function to delete a note
 function deleteNote(index) {
-    let notes = localStorage.getItem("notes");
 
-    if (notes == null) notesObj = [];
-    else notesObj = JSON.parse(notes);
-
-    notesObj.splice(index, 1);
+    currentnoteObj.splice(index, 1);
 
     localStorage.setItem("notes", 
         JSON.stringify(notesObj));
@@ -272,4 +198,3 @@ function deleteNote(index) {
     showNotes();
 }
 export default { notesObj, showNotes };
-export { startHighlighting, stopHighlighting };
