@@ -63,9 +63,11 @@ function showNotes() {
                     </b>
                 </p>
                 <p class="card-text"> 
-                           ${note.text}
-                            </p>`;
-                }
+                           ${note.text} 
+                </p>
+                <button class=edt-btn id=edt>Edit</button>
+                `;
+            }
         });
     }
 
@@ -80,13 +82,67 @@ function showNotes() {
 
     let notesElm = document.getElementById("notes");
 
-    if (notesObj.length != 0){
+    if (notesObj.length != 0) {
         notesElm.innerHTML = html;
+        
+        // Adding event listener for 'Edit' button after it's created
+        if(notesObj.length == 1){
+            let editButtons = document.getElementById('edt');
+            editButtons.addEventListener('click', function() {
+                console.log('Edit button clicked');
+                console.log(editButtons.className);
+            });
+        } else {
+        let editButtons = document.querySelectorAll('#edt');
+        editButtons.forEach(function(editBtn) {
+            editBtn.addEventListener('click', function() {
+                console.log('Edit button clicked');
+                console.log(editButtons.classList);
+            });
+        });
+    }
+
         notesElm.appendChild(deleteButton);
     }
     else
         notesElm.innerHTML = `Nothing to show! 
         Use "Add a Note" section above to add notes.`;
+
+}
+
+// Function to edit a note
+function editNote(noteId) {
+    console.log(noteId);
+    let notes = localStorage.getItem("notes");
+
+    if (notes == null) notesObj = [];
+    else notesObj = JSON.parse(notes);
+
+    let editTxt = document.getElementById("addTxt");
+    let editNoteContent = notesObj.find(note => note.id === noteId);
+
+    if (editNoteContent) {
+        // Set the text of the note to the input field for editing
+        editTxt.value = editNoteContent.text;
+
+        // Update the note content after editing
+        let saveBtn = document.createElement("button");
+        saveBtn.id = "saveBtn";
+        saveBtn.classList.add("btn", "btn-primary");
+        saveBtn.textContent = "Save";
+
+        saveBtn.addEventListener("click", function () {
+            editNoteContent.text = editTxt.value;
+            localStorage.setItem("notes", JSON.stringify(notesObj));
+            editTxt.value = "";
+            showNotes();
+        });
+
+        let notesElm = document.getElementById("notes");
+        notesElm.innerHTML = ""; // Clear previous content
+        notesElm.appendChild(editTxt);
+        notesElm.appendChild(saveBtn);
+    }
 }
 
 // Function to delete a note
