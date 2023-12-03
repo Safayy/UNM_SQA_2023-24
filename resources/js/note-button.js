@@ -1,8 +1,6 @@
 import videoListManager from './video-manager.js';
 import formatTime from './share.js';
 
-// showNotes();
-
 var notesObj;
 let notes = localStorage.getItem("notes");
     if (notes == null) notesObj = [];
@@ -21,8 +19,10 @@ addBtn.addEventListener("click", function(e) {
         time: currenttime,
         id: videoListManager.videoCurrent.id
     };
-
+    console.log(notesObj.length);
     notesObj.push(noteContent);
+    console.log(notesObj.length);
+    localStorage.setItem("notes",JSON.stringify(notesObj));
     addTxt.value = "";
 
     showNotes();
@@ -37,16 +37,9 @@ function getCurrentTimeOutsideFunction() {
     }
 }
 
-// Function to clear existing notes
-function clearNotes() {
-    let notesElm = document.getElementById("notes");
-    notesElm.innerHTML = ""; // Clears the inner HTML, removing all existing notes
-}
-
 function showNotes() {
     stopHighlighting();
     currentnoteObj = [];
-    console.log('Showing notes');
     
     let html = "";
 
@@ -59,91 +52,126 @@ function showNotes() {
     } else {
         notesObj.forEach(function(note,index) {
             if (note.id == videoListManager.videoCurrent.id){
-                currentnoteObj.push(note);
+                currentnoteObj.push({ note: note, index: index });
             }
         });
         startHighlighting();
     }
 
-    currentnoteObj.forEach(function(note,index){
+    currentnoteObj.forEach(function(item,index){
+        var note = item.note;
+        var index = item.index;
+        var deleteButtonId = `deleteButton_${index}`;
+        var editButtonId = `editButton_${index}`;
+        var saveButtonId = `saveButton_${index}`;
+        var inputFieldId = `inputField_${index}`;
+        var noteTextId = `noteText_${index}`;
+
         html += `
         <div class="note">
                 <p class="card-text"> 
                 <b>Time: ${formatTime(note.time)}</b>
                 </p>
-                <p class="card-text"> 
+                <p id="${noteTextId}" class="card-text"> 
                 ${note.text}
                 </p>
-        </div>`;      
+        </div>
+        <button id="${editButtonId}" class="edit-button"><i class="fa fa-pencil icon"></i></button>
+        <button id="${deleteButtonId}" class="delete-button"><i class="fa fa-trash-o icon"></i></button>
+        <input type="text" id="${inputFieldId}" style="display:none;">
+        <button id="${saveButtonId}" class="save-button" style="display:none;">Save</button>`;
     })
-
-    let deleteButton = document.createElement("button");
-    deleteButton.id = "dlt";
-    deleteButton.classList.add("btn", "btn-primary");
-    deleteButton.textContent = "Delete Note";
-
-    /*deleteButton.addEventListener("click", function () {
-        deleteNote(deleteButton.id);
-    });*/
 
     let notesElm = document.getElementById("notes");
 
     if (currentnoteObj.length != 0){
+        // Remove existing event listener before adding a new one
+        notesElm.removeEventListener('click', handleButtonClick);
         notesElm.innerHTML = html;
-        notesElm.appendChild(deleteButton);
+        // Attach a single event listener to the parent element (notesElm)
+        notesElm.addEventListener('click', handleButtonClick);
     }
     else
         notesElm.innerHTML = `Nothing to show! 
         Use "Add a Note" section above to add notes.`;
 }
 
-// Function to edit a note
-function editNote(noteId) {
-    console.log(noteId);
-    let notes = localStorage.getItem("notes");
-
-    if (notes == null) notesObj = [];
-    else notesObj = JSON.parse(notes);
-
-    let editTxt = document.getElementById("addTxt");
-    let editNoteContent = notesObj.find(note => note.id === noteId);
-
-    if (editNoteContent) {
-        // Set the text of the note to the input field for editing
-        editTxt.value = editNoteContent.text;
-
-        // Update the note content after editing
-        let saveBtn = document.createElement("button");
-        saveBtn.id = "saveBtn";
-        saveBtn.classList.add("btn", "btn-primary");
-        saveBtn.textContent = "Save";
-
-        saveBtn.addEventListener("click", function () {
-            editNoteContent.text = editTxt.value;
-            localStorage.setItem("notes", JSON.stringify(notesObj));
-            editTxt.value = "";
-            showNotes();
-        });
-
-        let notesElm = document.getElementById("notes");
-        notesElm.innerHTML = ""; // Clear previous content
-        notesElm.appendChild(editTxt);
-        notesElm.appendChild(saveBtn);
+function handleButtonClick(event) {
+    // Check if the clicked element is a delete button
+    if (event.target.classList.contains('delete-button')) {
+        var index = event.target.id.split('_')[1];
+        deleteNote(index);
+    } else if (event.target.classList.contains('edit-button')) {
+        var index = event.target.id.split('_')[1];
+        editNote(index);
+    } else if (event.target.classList.contains('save-button')) {
+        var index = event.target.id.split('_')[1];
+        saveNote(index);
     }
 }
 
+// Function to delete a note
+function deleteNote(index) {
+
+    console.log(index);
+    // Use splice to remove the item at the specified index
+    notesObj.splice(index, 1);
+    
+    localStorage.setItem("notes", JSON.stringify(notesObj));
+
+    showNotes();
+}
+
+function editNote(index) {
+    var inputFieldId = `inputField_${index}`;
+    var saveButtonId = `saveButton_${index}`;
+    var editButtonId = `editButton_${index}`;
+
+    // Show the input field and Save button, hide the Edit button
+    document.getElementById(inputFieldId).style.display = 'block';
+    document.getElementById(saveButtonId).style.display = 'inline-block';
+    document.getElementById(editButtonId).style.display = 'none';
+
+    // Set the input field value to the current note text
+    var noteText = notesObj[index].text;
+    document.getElementById(inputFieldId).value = noteText;
+}
+
+function saveNote(index) {
+    var inputFieldId = `inputField_${index}`;
+    var saveButtonId = `saveButton_${index}`;
+    var editButtonId = `editButton_${index}`;
+    var noteTextId = `noteText_${index}`;
+
+    // Get the input field value
+    var newNoteText = document.getElementById(inputFieldId).value;
+
+    // Update the note text in the notesObj array
+    notesObj[index].text = newNoteText;
+    console.log(newNoteText);
+    console.log(notesObj);
+    //save it to localstorage
+    localStorage.setItem("notes", JSON.stringify(notesObj));
+
+    // Update the displayed note text
+    document.getElementById(noteTextId).innerText = newNoteText;
+
+    // Hide the input field and Save button, show the Edit button
+    document.getElementById(inputFieldId).style.display = 'none';
+    document.getElementById(saveButtonId).style.display = 'none';
+    document.getElementById(editButtonId).style.display = 'inline-block';
+
+}
 
 let highlightInterval;
 
 // Function to start continuously checking and highlighting notes
 function startHighlighting() {
-    console.log("Start highlighting");
     highlightInterval = setInterval(function () {
         let currentTime = getCurrentTimeOutsideFunction();
-        console.log("Start counting");
 
-        currentnoteObj.forEach(function (note, index) {
-                console.log("checking note");
+        currentnoteObj.forEach(function (item, index) {
+                var note = item.note;
                 // Check if the current time is within the highlighting duration (1.5 seconds before and after)
                 let isHighlighted = currentTime >= note.time - 1.5 && currentTime <= note.time + 1.5;
 
@@ -155,7 +183,6 @@ function startHighlighting() {
 
 // Function to stop continuously checking and highlighting notes
 function stopHighlighting() {
-    console.log("Stop highlighting");
     clearInterval(highlightInterval);
 }
 
@@ -164,9 +191,7 @@ function toggleHighlight(index, isHighlighted) {
     let noteElements = document.getElementsByClassName("note");
 
     if (noteElements.length > index) {
-        console.log("checking note 2");
         if (isHighlighted) {
-            console.log("highlight");
             noteElements[index].classList.add("highlight");
             setTimeout(() => {
                 removeHighlight(index);
@@ -187,14 +212,5 @@ function removeHighlight(index) {
     }
 }
 
-// Function to delete a note
-function deleteNote(index) {
 
-    currentnoteObj.splice(index, 1);
-
-    localStorage.setItem("notes", 
-        JSON.stringify(notesObj));
-
-    showNotes();
-}
 export default { notesObj, showNotes };
