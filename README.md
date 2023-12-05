@@ -11,7 +11,7 @@ node ./index.js
 ```
 
 ## Run tests
-In the root directory run the command below to run the test suite. Server must be started.
+In the root directory run the command below to run the test suite. Server must be started. All test suite source code is located in the directory `.\resources\js\tests`.
 ```bash
 # Enter the root directory of the projecct
 cd UNM_SQA_2023-24/ 
