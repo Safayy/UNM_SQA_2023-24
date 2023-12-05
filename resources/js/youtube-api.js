@@ -81,5 +81,5 @@ class YoutubeAPI {
   }
 
 console.log(window.API_KEY)
-const youtubeAPI = new YoutubeAPI("AIzaSyBUw0zu71eLkwSFCCuU3OYcTSmU64puvKc")
+const youtubeAPI = new YoutubeAPI("AIzaSyDPuQT5Nus34BAORpwsDnFQuHwzWhErz5o")
 export default youtubeAPI;
