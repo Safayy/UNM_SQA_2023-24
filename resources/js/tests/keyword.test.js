@@ -36,7 +36,7 @@ test('TC008', async () => {
 
     // Expected result: video list should update based on the selected keywords
     videoTitles.forEach((titleText) => {
-        expect(titleText.toLowerCase()).toContain("software") || expect(titleText.toLowerCase()).toContain("development");
+        expect(titleText.toLowerCase()).toContain("software") || titleText.toLowerCase().toContain("development");
     });
 });
 
@@ -184,7 +184,7 @@ test('TC011', async () => {
 
     // Expected result: video list should update based on the selected keywords
     videoTitles.forEach((titleText) => {
-        expect(titleText.toLowerCase()).toContain("software") || expect(titleText.toLowerCase()).toContain("selenium");
+        expect(titleText.toLowerCase()).toContain("software") || titleText.toLowerCase().toContain("selenium");
     });
 });
 
@@ -242,7 +242,7 @@ test('TC013', async () => {
 
     // Expected result: video list should update based on the input
     videoTitles.forEach((titleText) => {
-        expect(titleText.toLowerCase()).toContain("testing") || expect(titleText.toLowerCase()).toContain("selenium");
+        expect(titleText.toLowerCase()).toContain("testing") || titleText.toLowerCase().toContain("selenium");
     });
 });
 
