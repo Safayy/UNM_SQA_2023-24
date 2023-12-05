@@ -106,7 +106,13 @@ h2 {
 #video-list > div {
     height: fit-content;
 }
-
 .selected-video {
     background-color: rgb(177, 203, 224);
+}
+.highlight {
+    background-color: lightyellow;
+    font-weight: bold;
+}
+.icon{
+    pointer-events: none;
 }

@@ -18,7 +18,9 @@ function exportToFile() {
     let exportContent = `Video Link: ${getCurrentlyPlayingVideoLink()}\n\nNotes:\n`;
 
     notesText.forEach((note) => {
-        exportContent += `[${formatTime(note.time)}] - ${note.text}\n`;
+        if (note.id == videoListManager.videoCurrent.id){
+            exportContent += `[${formatTime(note.time)}] - ${note.text}\n`;        
+        }
     });
 
     let blob = new Blob([exportContent], { type: "text/plain" });
