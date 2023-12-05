@@ -1,7 +1,7 @@
 const {By, until} = require('selenium-webdriver');
 
 test('TC001 Show Playlist', async () => {
-  let videos = await driver.wait(>
+  let videos = await driver.wait(
     until.elementsLocated(By.css('.playlist-video')), 5000
   );
   let thumbnails = await driver.wait(
