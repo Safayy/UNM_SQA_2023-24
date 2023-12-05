@@ -34,7 +34,7 @@ The program aims to lesen the amount of dependencies, in order to increase maint
 The required applications are Node and the libraries `webdriver-selenium chromedriver geckodriver express jest`.
 
 ## Group Members
-Safa Yousif Abdalla Abakar
-Pei Shan Yap
-Jinming Khor
-Jin Shuan Chan
+Safa Yousif Abdalla Abakar <br>
+Pei Shan Yap <br>
+Jinming Khor <br>
+Jin Shuan Chan <br>
