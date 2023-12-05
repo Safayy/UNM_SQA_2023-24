@@ -106,3 +106,7 @@ h2 {
 #video-list > div {
     height: fit-content;
 }
+
+.selected-video {
+    background-color: rgb(177, 203, 224);
+}

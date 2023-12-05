@@ -34,11 +34,17 @@ class VideoListManager {
         videoDiv.appendChild(titleDiv);
         videoDiv.appendChild(creatorDiv);
     
-        videoDiv.addEventListener("click", () => {
+        videoDiv.addEventListener("click", (event) => {
+          var playlistVideos = document.querySelectorAll('.playlist-video');
+          playlistVideos.forEach(videoItem => {
+            videoItem.classList.remove('selected-video');
+          });
+          event.currentTarget.classList.add('selected-video');
           this.displayVideo(video);
         });
     
         videoListDiv.appendChild(videoDiv);
+        document.querySelectorAll('.playlist-video')[0].classList.add('selected-video');
       }
     }
     setVideoList(videoList){
@@ -56,7 +62,7 @@ class VideoListManager {
     }
 
     displayVideo(video){
-      this.videoCurrent = video;  
+      this.videoCurrent = video;
       this.onReady(video.id);    
       this.player.loadVideoById(video.id, 0, "large")
     }
@@ -65,6 +71,8 @@ class VideoListManager {
       console.log('IframeAPI = Ready');
       this.player = new YT.Player('video-container', {
           videoId: id,
+          height: '100%',
+          width: '100%',
           events: {
               'onReady': onPlayerReady
           }
