@@ -8,4 +8,4 @@ beforeEach(async () => {
 
 afterEach(async () => {
   await global.driver.quit()
-});
+},9000);
