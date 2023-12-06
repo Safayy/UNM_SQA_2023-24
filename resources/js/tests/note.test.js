@@ -1,7 +1,7 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const fs = require('fs');
 
-//test TC014: Write and Save Note
+// test TC014: Write and Save Note
 test('TC014', async () => {
     await driver.manage().setTimeouts({ implicit: 5000 });
     let videoIframe = await driver.wait(
@@ -178,11 +178,11 @@ test('TC018', async () => {
     
     //Detect note highlight
     const note = await driver.findElement(By.id("notes"));
-    const noteclass = await note.findElement(By.className("note"));
-    expect(noteclass[0].classList.add).toHaveBeenCalledWith('highlight');
+    await driver.wait(until.elementLocated(By.css('.highlight')),3000);
+    console.log("found highlight");
 },10000);
 
-//TC019: Edit Button
+// TC019: Edit Button
 test('TC019', async () => {
 //edit
     await driver.manage().setTimeouts({ implicit: 5000 });
