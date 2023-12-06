@@ -1,6 +1,8 @@
 const { Builder, By, until } = require('selenium-webdriver');
 const fs = require('fs');
 const path = require('path');
+const os = require('os');
+
 
 test('TC020', async () => {
   await driver.manage().setTimeouts({ implicit: 5000 });
@@ -27,10 +29,9 @@ test('TC020', async () => {
   await new Promise(resolve => setTimeout(resolve, 5000));
 
   // 5. Read exported content
-  const downloadedFilePath = path.join("C:\\Users\\Jin Shuan\\Downloads", "notes.txt"); //Hard coded path, change if possible
+  const downloadedFilePath = path.join(os.homedir(), "Downloads", "notes.txt");
   const exportedFileContent = fs.readFileSync(downloadedFilePath, "utf-8");
   
-  expect(exportedFileContent).toContain("https://www.youtube.com/watch?v=9eOBpgEXLSI");
   expect(exportedFileContent).toContain("This is a test");
 },15000);
 
@@ -59,9 +60,10 @@ test('TC021', async () => {
   await new Promise(resolve => setTimeout(resolve, 5000));
 
   // 5. Read exported content
-  const downloadedFilePath = path.join("C:\\Users\\Jin Shuan\\Downloads", "notes.txt"); //Hard coded path, change if possible
+  const downloadedFilePath = path.join(os.homedir(), "Downloads", "notes.txt");
   const exportedFileContent = fs.readFileSync(downloadedFilePath, "utf-8");
 
+  expect(exportedFileContent).toContain("https://www.youtube.com/watch?v=9eOBpgEXLSI");
   expect(exportedFileContent).toContain("This is test 1");
   
   // 6. Change Video
@@ -75,6 +77,7 @@ test('TC021', async () => {
   await exportButton.click();
   await new Promise(resolve => setTimeout(resolve, 5000));
 
-  // 8. Read exported content
+  // 6. Read exported content
+  expect(exportedFileContent).toContain("https://www.youtube.com/watch?v=ns4DvbGQHlk")
   expect(exportedFileContent).toContain("This is test 2");
 },15000);
