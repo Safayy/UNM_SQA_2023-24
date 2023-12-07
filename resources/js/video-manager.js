@@ -1,3 +1,6 @@
+import exports from './note-button.js'
+const { notesObj, showNotes } = exports;
+
 class VideoListManager {
     constructor(){
       this.videoList = [];
@@ -11,7 +14,7 @@ class VideoListManager {
   
       for (let video of this.videoList) {
         var videoDiv = document.createElement("div");
-        videoDiv.className = "cnt-white-box";
+        videoDiv.className = "cnt-white-box playlist-video";
     
         var thumbnailDiv = document.createElement("div");
         thumbnailDiv.className = "thumbnail";
@@ -31,24 +34,36 @@ class VideoListManager {
         videoDiv.appendChild(titleDiv);
         videoDiv.appendChild(creatorDiv);
     
-        videoDiv.addEventListener("click", () => {
+        videoDiv.addEventListener("click", (event) => {
+          var playlistVideos = document.querySelectorAll('.playlist-video');
+          playlistVideos.forEach(videoItem => {
+            videoItem.classList.remove('selected-video');
+          });
+          event.currentTarget.classList.add('selected-video');
           this.displayVideo(video);
         });
     
         videoListDiv.appendChild(videoDiv);
+        document.querySelectorAll('.playlist-video')[0].classList.add('selected-video');
       }
     }
     setVideoList(videoList){
-      if (this.isUnique){
-        this.onYouTubeIframeAPIReady(videoList[0].id)
-        this.isUnique = false;
-      }
       this.videoList = videoList;
       this.displayPlayList();
       this.displayVideo(this.videoList[0]);
     }
+
+    onReady = async (id) => {
+      if(this.isUnique){
+        await this.onYouTubeIframeAPIReady(id);
+        this.isUnique = false
+      }
+      showNotes();
+    }
+
     displayVideo(video){
-      this.videoCurrent = video;      
+      this.videoCurrent = video;
+      this.onReady(video.id);    
       this.player.loadVideoById(video.id, 0, "large")
     }
 
@@ -56,6 +71,8 @@ class VideoListManager {
       console.log('IframeAPI = Ready');
       this.player = new YT.Player('video-container', {
           videoId: id,
+          height: '100%',
+          width: '100%',
           events: {
               'onReady': onPlayerReady
           }

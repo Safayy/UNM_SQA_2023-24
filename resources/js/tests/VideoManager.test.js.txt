@@ -1,4 +1,0 @@
-import VideoListManager from './VideoListManager.js';
-
-// Now you can use the VideoListManager class in this file
-const videoManager = new VideoListManager();
