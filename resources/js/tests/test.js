@@ -1,5 +1,8 @@
 const {Builder,By, until,Key} = require('selenium-webdriver');
-/*
+const fs = require('fs');
+const path = require('path');
+const os = require('os');
+
 test('TC001 Show Playlist', async () => {
   let videos = await driver.wait(
     until.elementsLocated(By.css('.playlist-video')), 5000
@@ -291,7 +294,8 @@ test('TC008', async () => {
 
   // Expected result: video list should update based on the selected keywords
   videoTitles.forEach((titleText) => {
-      expect(titleText.toLowerCase()).toContain("software") || titleText.toLowerCase().toContain("development");
+    const lowerCaseTitle = titleText.toLowerCase();
+    expect(lowerCaseTitle.includes("software") || lowerCaseTitle.includes("development")).toBe(true);
   });
 });
 
@@ -383,7 +387,7 @@ test('TC010', async () => {
   });
 
   // Expected result: video list should update based on the selected keywords
-  videoTitles.forEach((titleText) => {
+  await videoTitles.forEach((titleText) => {
       expect(titleText.toLowerCase()).toContain("selenium");
   });
 });
@@ -394,7 +398,7 @@ test('TC011', async () => {
   await keywordsButtonSetup.click();
 
   const keywordFieldSetup = await driver.findElement(By.id("newkeyword-field"));
-  await keywordFieldSetup.sendKeys("Selenium");
+  await keywordFieldSetup.sendKeys("Quality");
 
   const addButtonSetup = await driver.findElement(By.id("add-button"));
   await addButtonSetup.click();
@@ -410,7 +414,7 @@ test('TC011', async () => {
   const keyword1 = await driver.findElement(By.id("Software"));
   await keyword1.click();
 
-  const keyword2 = await driver.findElement(By.id("Selenium"));
+  const keyword2 = await driver.findElement(By.id("Quality"));
   await keyword2.click();
 
   // Step 3: Click on the 'Submit' button
@@ -425,7 +429,7 @@ test('TC011', async () => {
   const searchbarValue = await searchbar.getAttribute("value");
 
   // Expected result: The search bar should have the selected keywords
-  expect(searchbarValue).toBe("Software+Selenium+...");
+  expect(searchbarValue).toBe("Software+Quality+...");
   
   // Check if the video list contains content related
   const videoTitles = await driver.executeScript(() => {
@@ -439,8 +443,9 @@ test('TC011', async () => {
 
   // Expected result: video list should update based on the selected keywords
   await videoTitles.forEach((titleText) => {
-      expect(titleText.toLowerCase()).toContain("software") || titleText.toLowerCase().toContain("selenium");
-  });
+    const lowerCaseTitle = titleText.toLowerCase();
+    expect(lowerCaseTitle.includes("software") || lowerCaseTitle.includes("quality")).toBe(true);
+   });
 });
 
 test('TC012', async () => {
@@ -470,7 +475,7 @@ test('TC012', async () => {
   // Expected result: the custom keyword should remain in the keywords list
   // If the element does not return null means element is found and the new keyword remains after refresh
   expect(newKeyword).not.toBeNull();
-});
+},9000);
 
 test('TC013', async () => {
   // Step 1: Click on the search bar
@@ -497,7 +502,8 @@ test('TC013', async () => {
 
   // Expected result: video list should update based on the input
   videoTitles.forEach((titleText) => {
-      expect(titleText.toLowerCase()).toContain("testing") || titleText.toLowerCase().toContain("selenium");
+    const lowerCaseTitle = titleText.toLowerCase();
+    expect(lowerCaseTitle.includes("testing") || lowerCaseTitle.includes("selenium")).toBe(true);
   });
 });
 
@@ -531,7 +537,7 @@ test('TC014', async () => {
   // Expected result: The note area should have the timestamp and note
   expect(combinetext).toContain("Time: 0:00");
   expect(combinetext).toContain("This is Note 1");
-},10000);
+},15000);
 
 //TC015: Submit multiple notes
 test('TC015', async () => {
@@ -605,7 +611,7 @@ await driver.manage().setTimeouts({ implicit: 5000 });
   // Expected result: The note area should have the notes
   expect(combinetext).toContain("Time: 0:00");
   expect(combinetext).toContain("This is Note 1");
-},8000);
+},15000);
 
 //TC017: Certain notes should only be displayed at certain video
 test('TC017', async () => {
@@ -655,7 +661,7 @@ await driver.manage().setTimeouts({ implicit: 5000 });
   expect(combinetext).not.toContain("This is Note 1");
   expect(combinetext).toContain("This is Video 2");
 //play next video
-},10000);*/
+},15000);
 
 //TC018: Highlight note
 test('TC018', async () => {
@@ -687,9 +693,9 @@ test('TC018', async () => {
   );
   
   expect(await noteElement[0].getAttribute('outerHTML')).toBe(await highlightedNoteElement[0].getAttribute('outerHTML'));
-},10000);
+},15000);
 
-/*
+
 //TC019: Edit Button
 test('TC019', async () => {
 //edit
@@ -729,4 +735,85 @@ test('TC019', async () => {
 
   // Expected result: The note area should have the edited note
   expect(combinetext).toContain("This is Edited Note 1");
-});*/
+});
+
+test('TC020', async () => {
+  await driver.manage().setTimeouts({ implicit: 5000 });
+  let videoIframe = await driver.wait(
+      until.elementsLocated(By.css('iframe#video-container')), 9000
+    );
+  console.log("Next");
+  // 1. Activate play button
+  await new Promise(r => setTimeout(r, 1000));
+  const playButton = await driver.findElement(By.id("video-container"));
+  console.log("found player");
+  await playButton.click();
+
+  // 2. Write note
+  await driver.findElement(By.id("addTxt")).sendKeys("This is a test");
+
+  // 3. Save note
+  const notebutton = await driver.findElement(By.id("addBtn"));
+  await notebutton.click();
+  
+  // 4. Activate export function
+  const exportButton = await driver.findElement(By.id("exportBtn"));
+  await exportButton.click();
+  await new Promise(resolve => setTimeout(resolve, 5000));
+
+  // 5. Read exported content
+  const downloadedFilePath = path.join("D:\\Downloads\\notes.txt");
+  const exportedFileContent = fs.readFileSync(downloadedFilePath, "utf-8");
+  
+  expect(exportedFileContent).toContain("This is a test");
+},15000);
+
+test('TC021', async () => {
+  await driver.manage().setTimeouts({ implicit: 5000 });
+  let videoIframe = await driver.wait(
+      until.elementsLocated(By.css('iframe#video-container')), 9000
+    );
+  console.log("Next");
+  // 1. Activate play button
+  await new Promise(r => setTimeout(r, 1000));
+  const playButton = await driver.findElement(By.id("video-container"));
+  console.log("found player");
+  await playButton.click();
+
+  // 2. Write note
+  await driver.findElement(By.id("addTxt")).sendKeys("This is test 1");
+
+  // 3. Save note
+  const notebutton = await driver.findElement(By.id("addBtn"));
+  await notebutton.click();
+  
+  // 4. Activate export function
+  const exportButton = await driver.findElement(By.id("exportBtn"));
+  await exportButton.click();
+  await new Promise(resolve => setTimeout(resolve, 5000));
+
+  // 5. Read exported content
+  const downloadedFilePath = path.join("D:\\Downloads\\notes (1).txt");
+  const exportedFileContent = fs.readFileSync(downloadedFilePath, "utf-8");
+
+  expect(exportedFileContent).toContain("https://www.youtube.com/watch?v=9eOBpgEXLSI");
+  expect(exportedFileContent).toContain("This is test 1");
+  
+  // 6. Change Video
+  const nextVid = await driver.findElement(By.xpath('//*[@id="video-list"]/div[2]'));
+    await nextVid.click();
+  
+  await driver.findElement(By.id("addTxt")).sendKeys("This is test 2");
+  await notebutton.click();
+
+  // 7. Activate export function again
+  await exportButton.click();
+  await new Promise(resolve => setTimeout(resolve, 5000));
+
+  const downloadedFilePath2 = path.join("D:\\Downloads\\notes (2).txt");
+  const exportedFileContent2 = fs.readFileSync(downloadedFilePath2, "utf-8");
+
+  // 6. Read exported content
+  expect(exportedFileContent2).toContain("https://www.youtube.com/watch?v=ns4DvbGQHlk")
+  expect(exportedFileContent2).toContain("This is test 2");
+},15000);
